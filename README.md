@@ -1,7 +1,7 @@
 # HỆ THỐNG GIÁM SÁT MÔI TRƯỜNG TRẠI TRỒNG SÂM NGỌC LINH (IOT & LORA)
 
 ## GIỚI THIỆU
-Đồ án "Xây dựng hệ thống giám sát môi trường ứng dụng cho trại trồng Sâm Ngọc Linh" được thực hiện nhằm giải quyết bài toán giám sát các chỉ số sinh thái khắt khe (Nhiệt độ, độ ẩm đất, độ ẩm không khí) tại các vùng núi cao, nơi hạ tầng mạng kém ổn định.
+Dự án "Xây dựng hệ thống giám sát môi trường ứng dụng cho trại trồng Sâm Ngọc Linh" được thực hiện nhằm giải quyết bài toán giám sát các chỉ số sinh thái khắt khe (Nhiệt độ, độ ẩm đất, độ ẩm không khí) tại các vùng núi cao, nơi hạ tầng mạng kém ổn định.
 
 Hệ thống sử dụng công nghệ truyền thông không dây LoRa (Long Range) để truyền dữ liệu tầm xa tiết kiệm năng lượng, kết hợp với nền tảng Firebase và ứng dụng đa nền tảng Flutter để quản lý và giám sát từ xa.
 
