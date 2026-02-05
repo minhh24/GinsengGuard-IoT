@@ -1,94 +1,83 @@
-# GinsengGuard IoT - Hệ Thống Giám Sát Sâm Ngọc Linh
+# GinsengGuard IoT - He Thong Giam Sat Sam Ngoc Linh
 
-**GinsengGuard IoT** là giải pháp giám sát môi trường thời gian thực dành riêng cho các trại trồng Sâm Ngọc Linh. [cite_start]Hệ thống sử dụng công nghệ truyền thông LoRa tầm xa kết hợp với nền tảng Firebase và ứng dụng đa nền tảng (Flutter) để giúp người nông dân theo dõi và bảo vệ "quốc bảo" dược liệu một cách hiệu quả nhất[cite: 1747, 1750].
+GinsengGuard IoT la giai phap giam sat moi truong thoi gian thuc danh rieng cho cac trai trong Sam Ngoc Linh. He thong su dung cong nghe truyen thong LoRa tam xa ket hop voi nen tang Firebase va ung dung da nen tang (Flutter) de giup nguoi nong dan theo doi va bao ve duoc lieu quy mot cach hieu qua.
 
+## Tac gia va Don vi thuc hien
 
+* Sinh vien thuc hien:
+    * Nguyen Quang Minh (22139041) - Phan cung & Firmware
+    * Ngo Dinh Thai Long (22139038) - App/Web & Firebase
+* Giang vien huong dan: TS. Nguyen Van Phuc
+* Don vi: Truong Dai hoc Su pham Ky thuat TP.HCM (HCMUTE)
 
+## Tinh nang noi bat
 
-##  Tính năng nổi bật
-Hệ thống giải quyết vấn đề khó khăn trong canh tác Sâm Ngọc Linh tại các vùng núi cao, hiểm trở:
+He thong giai quyet van de kho khan trong canh tac Sam Ngoc Linh tai cac vung nui cao voi cac tinh nang chinh:
 
-* [cite_start]**Truyền tin tầm xa (LoRa):** Sử dụng công nghệ LoRa (RA-02 433MHz) giúp truyền dữ liệu ổn định lên đến **1.6 km** trong môi trường đô thị (và xa hơn ở vùng núi), khắc phục hạn chế của Wi-Fi/Bluetooth[cite: 2361, 2363].
-* [cite_start]**Giám sát đa điểm (Multi-node):** Hỗ trợ 02 Node Slave hoạt động độc lập bằng pin, thu thập dữ liệu tại các vị trí khác nhau[cite: 1914].
-* **Đo lường toàn diện:**
-    * Nhiệt độ ($^{\circ}C$)
-    * Độ ẩm không khí (%)
-    * Độ ẩm đất (%)
-    * [cite_start]Dung lượng Pin của trạm cảm biến (%) [cite: 1890, 1926]
-* [cite_start]**Đồng bộ Cloud (Firebase):** Dữ liệu được đẩy lên Firebase Realtime Database, đảm bảo tốc độ cập nhật tức thì[cite: 1907].
-* **Ứng dụng đa nền tảng (Flutter):** Giám sát mọi lúc mọi nơi qua **Android App** và **Web Dashboard**. [cite_start]Hỗ trợ biểu đồ lịch sử và cảnh báo vượt ngưỡng[cite: 1893, 1902].
-* [cite_start]**Cảnh báo thông minh:** Tự động phát cảnh báo trên giao diện khi các chỉ số vượt ngưỡng sinh thái lý tưởng của Sâm Ngọc Linh (Nhiệt độ $15-25^{\circ}C$, Độ ẩm KK 75-90%, Độ ẩm đất 60-70%)[cite: 1772, 1775, 1778, 2431].
+* Truyen tin tam xa (LoRa): Su dung cong nghe LoRa (RA-02 433MHz) giup truyen du lieu on dinh len den 1.6 km trong moi truong do thi (va xa hon o vung nui), khac phuc han che cua Wi-Fi/Bluetooth.
+* Giam sat da diem (Multi-node): Ho tro 02 Node Slave hoat dong doc lap bang pin, thu thap du lieu tai cac vi tri khac nhau.
+* Do luong toan dien:
+    * Nhiet do (do C)
+    * Do am khong khi (%)
+    * Do am dat (%)
+    * Dung luong Pin cua tram cam bien (%)
+* Dong bo Cloud (Firebase): Du lieu duoc day len Firebase Realtime Database, dam bao toc do cap nhat tuc thi.
+* Ung dung da nen tang (Flutter): Giam sat moi luc moi noi qua Android App va Web Dashboard. Ho tro bieu do lich su va canh bao vuot nguong.
+* Canh bao thong minh: Tu dong phat canh bao tren giao dien khi cac chi so vuot nguong sinh thai ly tuong cua Sam Ngoc Linh (Nhiet do 15-25 do C, Do am KK 75-90%, Do am dat 60-70%).
 
----
+## Kien truc he thong va Phan cung
 
-##  Kiến trúc hệ thống & Phần cứng
+He thong hoat dong theo mo hinh Master-Slave:
 
+### 1. Node Cam bien (Slave Node)
+* Vi dieu khien: Arduino Pro Mini (Tiet kiem nang luong).
+* Truyen thong: Module LoRa RA-02 (Giao tiep SPI).
+* Cam bien:
+    * DHT11: Do nhiet do va do am khong khi.
+    * Capacitive Soil Moisture Sensor: Do do am dat.
+    * Mach phan ap: Do dung luong pin 18650.
+* Nguon: Pin Li-ion 18650 + Mach tang ap SX1308 (3.7V len 5V).
 
-Hệ thống hoạt động theo mô hình **Master-Slave**:
+### 2. Node Trung tam (Master Node)
+* Vi dieu khien: ESP32 DevKit V1 (Xu ly trung tam va Ket noi Wi-Fi).
+* Truyen thong: Module LoRa RA-02 (Nhan du lieu tu Slave).
+* Hien thi: Man hinh LCD 1602 (I2C) hien thi thong so tai cho.
+* Nguon: Su dung LM1117-3.3V va SX1308 de cap nguon on dinh cho cac module.
 
-### 1. Node Cảm biến (Slave Node)
-* [cite_start]**Vi điều khiển:** Arduino Pro Mini (Tiết kiệm năng lượng)[cite: 2102].
-* [cite_start]**Truyền thông:** Module LoRa RA-02 (SPI)[cite: 2027].
-* **Cảm biến:**
-    * [cite_start]DHT11: Đo nhiệt độ & độ ẩm không khí[cite: 2026].
-    * [cite_start]Capacitive Soil Moisture Sensor: Đo độ ẩm đất[cite: 2026].
-    * [cite_start]Mạch phân áp: Đo dung lượng pin 18650[cite: 1959].
-* [cite_start]**Nguồn:** Pin Li-ion 18650 + Mạch tăng áp SX1308 (3.7V lên 5V)[cite: 2025].
-
-### 2. Node Trung tâm (Master Node)
-* [cite_start]**Vi điều khiển:** ESP32 DevKit V1 (Xử lý trung tâm & Kết nối Wi-Fi)[cite: 2251].
-* **Truyền thông:** Module LoRa RA-02 (Nhận dữ liệu từ Slave).
-* [cite_start]**Hiển thị:** Màn hình LCD 1602 (I2C) hiển thị thông số tại chỗ[cite: 2153].
-* [cite_start]**Nguồn:** Sử dụng LM1117-3.3V và SX1308 để cấp nguồn ổn định cho các module[cite: 2245].
-
----
-
-##  Công nghệ phần mềm
+## Cong nghe phan mem
 
 ### Firmware (C/C++)
-* Lập trình trên **Arduino IDE**.
-* [cite_start]Sử dụng thư viện LoRa để đóng gói và giải mã gói tin (ID, Temp, Hum, Soil, Bat)[cite: 2320].
-* [cite_start]Master (ESP32) hoạt động như một Gateway: Nhận gói tin LoRa -> Xử lý JSON -> Gửi HTTP Request lên Firebase[cite: 1943].
+* Lap trinh tren Arduino IDE.
+* Su dung thu vien LoRa de dong goi va giai ma goi tin (ID, Temp, Hum, Soil, Bat).
+* Master (ESP32) hoat dong nhu mot Gateway: Nhan goi tin LoRa -> Xu ly JSON -> Gui HTTP Request len Firebase.
 
-### App & Web (Dart/Flutter)
-* [cite_start]**Framework:** Google Flutter (Build cho Android & Web)[cite: 1841].
-* **Backend:** Firebase Realtime Database.
-* **Giao diện:**
-    * **Dashboard:** Hiển thị thẻ trạng thái (Card) cho từng Node.
-    * [cite_start]**Chart:** Biểu đồ đường (Line chart) theo dõi biến động môi trường theo thời gian thực[cite: 2470].
-    * [cite_start]**Settings:** Thanh trượt (Slider) để cài đặt ngưỡng cảnh báo Min/Max[cite: 2605].
+### App va Web (Dart/Flutter)
+* Framework: Google Flutter (Build cho Android va Web).
+* Backend: Firebase Realtime Database.
+* Giao dien:
+    * Dashboard: Hien thi the trang thai (Card) cho tung Node.
+    * Chart: Bieu do duong (Line chart) theo doi bien dong moi truong theo thoi gian thuc.
+    * Settings: Thanh truot (Slider) de cai dat nguong canh bao Min/Max.
 
----
+## Ket qua thuc nghiem
 
-##  Hình ảnh thực tế & Kết quả
+* Ket qua thu nghiem thuc te cho thay he thong hoat dong on dinh o khoang cach 1.6 km trong moi truong do thi co vat can.
+* Du lieu duoc dong bo len Web va App voi do tre thap.
+* Canh bao hoat dong chinh xac khi cac thong so moi truong vuot nguong cai dat.
 
-| Master Node | Slave Node |
-|:---:|:---:|
-| *(Chèn hình 4.1)* | *(Chèn hình 4.2)* |
+## Huong dan cai dat
 
-| Web Dashboard | App Mobile |
-|:---:|:---:|
-| *(Chèn hình 4.5)* | *(Chèn hình 4.6)* |
+1. Phan cung:
+    * Nap code Slave.ino cho Arduino Pro Mini.
+    * Nap code Master.ino cho ESP32 (Cau hinh SSID/Pass WiFi va Firebase Host/Auth).
+    * Dau noi mach theo so do nguyen ly trong thu muc Schematic.
 
-*Kết quả thử nghiệm tại TP.HCM cho thấy hệ thống hoạt động ổn định ở khoảng cách **1.6 km**. [cite_start]Khi vượt quá 1.7 km trong môi trường nhiều vật cản, tín hiệu bắt đầu suy hao*[cite: 2361, 2368].
+2. Phan mem:
+    * Cai dat Flutter SDK.
+    * Cau hinh google-services.json (Android) va firebase_options.dart (Web).
+    * Chay lenh "flutter run" de khoi chay ung dung.
 
----
-
-##  Hướng dẫn cài đặt (Sơ lược)
-
-1.  **Phần cứng:**
-    * Nạp code `Slave.ino` cho Arduino Pro Mini.
-    * Nạp code `Master.ino` cho ESP32 (Cấu hình SSID/Pass WiFi và Firebase Host/Auth).
-    * Đấu nối mạch theo sơ đồ nguyên lý trong thư mục `Schematic`.
-2.  **Phần mềm:**
-    * Cài đặt Flutter SDK.
-    * Cấu hình `google-services.json` (Android) và `firebase_options.dart` (Web).
-    * Chạy lệnh `flutter run` để khởi chạy ứng dụng.
-
----
-
-##  Hướng phát triển (Future Work)
-* [cite_start]Tối ưu hóa năng lượng (Sleep mode) cho các Node cảm biến[cite: 2647].
-* [cite_start]Thêm cảm biến ánh sáng và CO2 để giám sát toàn diện hơn[cite: 2648].
-* [cite_start]Tích hợp AI để dự báo sâu bệnh và tự động điều khiển hệ thống tưới[cite: 2654].
-
+## Huong phat trien
+* Toi uu hoa nang luong (Sleep mode) cho cac Node cam bien de keo dai thoi gian dung pin.
+* Them cam bien anh sang va CO2 de giam sat toan dien hon.
+* Tich hop AI de du bao sau benh va tu dong dieu khien he thong tuoi.
