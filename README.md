@@ -1,83 +1,64 @@
-# GinsengGuard IoT - He Thong Giam Sat Sam Ngoc Linh
+# HỆ THỐNG GIÁM SÁT MÔI TRƯỜNG TRẠI TRỒNG SÂM NGỌC LINH (IOT & LORA)
 
-GinsengGuard IoT la giai phap giam sat moi truong thoi gian thuc danh rieng cho cac trai trong Sam Ngoc Linh. He thong su dung cong nghe truyen thong LoRa tam xa ket hop voi nen tang Firebase va ung dung da nen tang (Flutter) de giup nguoi nong dan theo doi va bao ve duoc lieu quy mot cach hieu qua.
+## GIỚI THIỆU
+[cite_start]Đồ án "Xây dựng hệ thống giám sát môi trường ứng dụng cho trại trồng Sâm Ngọc Linh" được thực hiện nhằm giải quyết bài toán giám sát các chỉ số sinh thái khắt khe (Nhiệt độ, độ ẩm đất, độ ẩm không khí) tại các vùng núi cao, nơi hạ tầng mạng kém ổn định[cite: 5, 49, 51].
 
-## Tac gia va Don vi thuc hien
+[cite_start]Hệ thống sử dụng công nghệ truyền thông không dây LoRa (Long Range) để truyền dữ liệu tầm xa tiết kiệm năng lượng, kết hợp với nền tảng Firebase và ứng dụng đa nền tảng Flutter để quản lý và giám sát từ xa[cite: 56, 57].
 
-* Sinh vien thuc hien:
-    * Nguyen Quang Minh (22139041) - Phan cung & Firmware
-    * Ngo Dinh Thai Long (22139038) - App/Web & Firebase
-* Giang vien huong dan: TS. Nguyen Van Phuc
-* Don vi: Truong Dai hoc Su pham Ky thuat TP.HCM (HCMUTE)
+Sinh viên thực hiện:
+- [cite_start]Nguyễn Quang Minh - 22139041 [cite: 7]
+- [cite_start]Ngô Đình Thái Long - 22139038 [cite: 8]
+Giảng viên hướng dẫn: TS. [cite_start]Nguyễn Văn Phúc [cite: 6]
+[cite_start]Đơn vị: Trường Đại học Sư phạm Kỹ thuật TP.HCM (HCMUTE) [cite: 2]
 
-## Tinh nang noi bat
+## TÍNH NĂNG NỔI BẬT
+- [cite_start]Giám sát thời gian thực: Cập nhật liên tục nhiệt độ, độ ẩm không khí, độ ẩm đất và mức pin từ các node cảm biến[cite: 61, 201].
+- [cite_start]Truyền thông LoRa tầm xa: Duy trì kết nối ổn định giữa các Node cảm biến và Gateway với khoảng cách thử nghiệm thực tế đạt 1.6 km trong môi trường đô thị[cite: 672].
+- [cite_start]Hệ thống cảnh báo: Người dùng có thể tự cài đặt ngưỡng an toàn trên ứng dụng; hệ thống tự động gửi cảnh báo khi thông số môi trường vượt ngưỡng thiết lập[cite: 63, 741].
+- [cite_start]Đa nền tảng: Ứng dụng điều khiển hoạt động đồng bộ trên cả Android và Web[cite: 57, 204].
+- [cite_start]Lưu trữ và trực quan hóa dữ liệu: Biểu đồ trực quan giúp theo dõi xu hướng biến đổi của môi trường theo thời gian thực[cite: 205, 782].
 
-He thong giai quyet van de kho khan trong canh tac Sam Ngoc Linh tai cac vung nui cao voi cac tinh nang chinh:
+## KIẾN TRÚC HỆ THỐNG VÀ CÔNG NGHỆ
 
-* Truyen tin tam xa (LoRa): Su dung cong nghe LoRa (RA-02 433MHz) giup truyen du lieu on dinh len den 1.6 km trong moi truong do thi (va xa hon o vung nui), khac phuc han che cua Wi-Fi/Bluetooth.
-* Giam sat da diem (Multi-node): Ho tro 02 Node Slave hoat dong doc lap bang pin, thu thap du lieu tai cac vi tri khac nhau.
-* Do luong toan dien:
-    * Nhiet do (do C)
-    * Do am khong khi (%)
-    * Do am dat (%)
-    * Dung luong Pin cua tram cam bien (%)
-* Dong bo Cloud (Firebase): Du lieu duoc day len Firebase Realtime Database, dam bao toc do cap nhat tuc thi.
-* Ung dung da nen tang (Flutter): Giam sat moi luc moi noi qua Android App va Web Dashboard. Ho tro bieu do lich su va canh bao vuot nguong.
-* Canh bao thong minh: Tu dong phat canh bao tren giao dien khi cac chi so vuot nguong sinh thai ly tuong cua Sam Ngoc Linh (Nhiet do 15-25 do C, Do am KK 75-90%, Do am dat 60-70%).
+### 1. Phần cứng
+- Node Slave (Thiết bị đầu cuối):
+  - [cite_start]Vi điều khiển: Arduino Pro Mini (Lựa chọn tối ưu năng lượng cho thiết bị chạy pin)[cite: 413, 417].
+  - [cite_start]Module truyền thông: LoRa RA-02 (Tần số 433MHz)[cite: 338, 346].
+  - [cite_start]Cảm biến: DHT11 (Đo nhiệt độ/Độ ẩm không khí) và Cảm biến độ ẩm đất[cite: 337, 348].
+  - [cite_start]Nguồn: Pin 18650 kết hợp mạch tăng áp SX1308 và mạch phân áp giám sát dung lượng pin[cite: 336, 270].
 
-## Kien truc he thong va Phan cung
+- Node Master (Gateway trung tâm):
+  - [cite_start]Vi điều khiển chính: ESP32 DevKit V1 (Nhận dữ liệu LoRa, xử lý và đẩy lên Firebase qua Wi-Fi)[cite: 562, 566].
+  - [cite_start]Hiển thị: Màn hình LCD 16x2 giao tiếp I2C để theo dõi tại chỗ[cite: 464, 467].
 
-He thong hoat dong theo mo hinh Master-Slave:
+### 2. Phần mềm
+- [cite_start]Firmware: C/C++ (Arduino IDE)[cite: 147, 157].
+- [cite_start]Mobile/Web App: Ngôn ngữ Dart trên nền tảng Flutter[cite: 152, 153].
+- [cite_start]Backend/Database: Google Firebase Realtime Database[cite: 164, 165].
+- [cite_start]Thiết kế mạch in (PCB): Altium Designer[cite: 171].
 
-### 1. Node Cam bien (Slave Node)
-* Vi dieu khien: Arduino Pro Mini (Tiet kiem nang luong).
-* Truyen thong: Module LoRa RA-02 (Giao tiep SPI).
-* Cam bien:
-    * DHT11: Do nhiet do va do am khong khi.
-    * Capacitive Soil Moisture Sensor: Do do am dat.
-    * Mach phan ap: Do dung luong pin 18650.
-* Nguon: Pin Li-ion 18650 + Mach tang ap SX1308 (3.7V len 5V).
+## KẾT QUẢ THỬ NGHIỆM
+- [cite_start]Phạm vi truyền thông: Hệ thống hoạt động ổn định ở khoảng cách 1.6 km trong môi trường đô thị nhiều vật cản[cite: 672]. [cite_start]Mất kết nối ở khoảng cách trên 1.7 km[cite: 679].
+- [cite_start]Độ chính xác: Dữ liệu từ 2 Node Slave gửi về Master đầy đủ, chính xác và được đồng bộ lên Firebase với độ trễ thấp[cite: 648, 673].
+- [cite_start]Chức năng cảnh báo: Hệ thống cảnh báo hoạt động tức thời trên Dashboard khi phát hiện thông số vượt ngưỡng cài đặt[cite: 940].
 
-### 2. Node Trung tam (Master Node)
-* Vi dieu khien: ESP32 DevKit V1 (Xu ly trung tam va Ket noi Wi-Fi).
-* Truyen thong: Module LoRa RA-02 (Nhan du lieu tu Slave).
-* Hien thi: Man hinh LCD 1602 (I2C) hien thi thong so tai cho.
-* Nguon: Su dung LM1117-3.3V va SX1308 de cap nguon on dinh cho cac module.
+## HƯỚNG DẪN CÀI ĐẶT
+1. Nạp Firmware:
+   - Sử dụng Arduino IDE để nạp code cho Arduino Pro Mini (Slave) và ESP32 (Master).
+   - Cấu hình thông tin Wi-Fi và Firebase API Key trong code của ESP32.
 
-## Cong nghe phan mem
+2. Cài đặt ứng dụng:
+   - Yêu cầu cài đặt Flutter SDK.
+   - Chạy lệnh "flutter pub get" để tải các thư viện.
+   - Chạy lệnh "flutter run" để khởi chạy ứng dụng trên máy ảo hoặc thiết bị thật.
 
-### Firmware (C/C++)
-* Lap trinh tren Arduino IDE.
-* Su dung thu vien LoRa de dong goi va giai ma goi tin (ID, Temp, Hum, Soil, Bat).
-* Master (ESP32) hoat dong nhu mot Gateway: Nhan goi tin LoRa -> Xu ly JSON -> Gui HTTP Request len Firebase.
+## HƯỚNG PHÁT TRIỂN
+- [cite_start]Tối ưu hóa năng lượng bằng chế độ Deep Sleep cho Node Slave để kéo dài thời gian hoạt động của pin[cite: 958].
+- [cite_start]Tích hợp thêm các cảm biến môi trường khác như ánh sáng, nồng độ CO2 và độ pH đất[cite: 959].
+- [cite_start]Áp dụng mô hình AI/Machine Learning để dự báo xu hướng thời tiết và đưa ra gợi ý chăm sóc cây trồng tự động[cite: 965].
+- [cite_start]Mở rộng phát triển ứng dụng trên nền tảng iOS[cite: 966].
 
-### App va Web (Dart/Flutter)
-* Framework: Google Flutter (Build cho Android va Web).
-* Backend: Firebase Realtime Database.
-* Giao dien:
-    * Dashboard: Hien thi the trang thai (Card) cho tung Node.
-    * Chart: Bieu do duong (Line chart) theo doi bien dong moi truong theo thoi gian thuc.
-    * Settings: Thanh truot (Slider) de cai dat nguong canh bao Min/Max.
-
-## Ket qua thuc nghiem
-
-* Ket qua thu nghiem thuc te cho thay he thong hoat dong on dinh o khoang cach 1.6 km trong moi truong do thi co vat can.
-* Du lieu duoc dong bo len Web va App voi do tre thap.
-* Canh bao hoat dong chinh xac khi cac thong so moi truong vuot nguong cai dat.
-
-## Huong dan cai dat
-
-1. Phan cung:
-    * Nap code Slave.ino cho Arduino Pro Mini.
-    * Nap code Master.ino cho ESP32 (Cau hinh SSID/Pass WiFi va Firebase Host/Auth).
-    * Dau noi mach theo so do nguyen ly trong thu muc Schematic.
-
-2. Phan mem:
-    * Cai dat Flutter SDK.
-    * Cau hinh google-services.json (Android) va firebase_options.dart (Web).
-    * Chay lenh "flutter run" de khoi chay ung dung.
-
-## Huong phat trien
-* Toi uu hoa nang luong (Sleep mode) cho cac Node cam bien de keo dai thoi gian dung pin.
-* Them cam bien anh sang va CO2 de giam sat toan dien hon.
-* Tich hop AI de du bao sau benh va tu dong dieu khien he thong tuoi.
+## LIÊN HỆ
+- Nguyễn Quang Minh
+- Email: [Email của bạn]
+- LinkedIn: [Link Profile LinkedIn của bạn]
